@@ -1,0 +1,48 @@
+﻿@model SportsStore.WebUI.Models.ProductsListViewModel
+
+@{
+    ViewBag.Title = "Products";
+}
+
+<div class="product-list">
+@foreach (var p in Model.Products) {
+    Html.RenderPartial("ProductSummary", p);
+}
+ 
+ <div class="pager">
+    @Html.PageLinks(Model.PagingInfo, x => Url.Action("ProductList", new { page = x, category = Model.CurrentCategory }))
+</div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        $('.pageNumber').live("click", function () {
+
+            $.each($('.pageNumber'), function () {
+                $(this).removeClass('selected');
+            });
+
+            $(this).addClass('selected');
+            var pageNo = parseInt($(this).html());
+            $.get('@Url.Action("ProductList")', { 'page': pageNo }, function (data) {
+                $('.product-list').empty().html(data);
+            });
+            return false;
+        });
+
+        $('#categories a').live("click", function () {
+            var pageString = $(this).html();
+            $.each($('#categories a'), function () {
+                $(this).removeClass('selected');
+            });
+            $(this).addClass('selected');
+            $.get('@Url.Action("ProductList", "Product")', { 'page': 1, 'category': pageString }, function (data) {
+                $('.product-list').empty().html(data);
+            });
+            return false;
+        });
+    });
+
+</script>

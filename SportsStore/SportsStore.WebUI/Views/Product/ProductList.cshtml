@@ -1,0 +1,9 @@
+﻿@model SportsStore.WebUI.Models.ProductsListViewModel
+
+@foreach (var p in Model.Products) {
+    Html.RenderPartial("ProductSummary", p);
+}
+
+<div class="pager">
+    @Html.PageLinks(Model.PagingInfo, x => Url.Action("ProductList", "Product", new { page = x, category = Model.CurrentCategory }))
+</div>
